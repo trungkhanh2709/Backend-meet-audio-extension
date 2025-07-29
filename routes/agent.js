@@ -6,21 +6,18 @@ const axios = require("axios");
 router.post("/send-captions", async (req, res) => {
   const { message, captions } = req.body;
 
-  console.log("🔹 Captions:", captions);
-  console.log("🔹 Message:", message);
-
   const formattedTranscript = captions
     .map((cap) => `[${cap.time}] ${cap.person}: ${cap.text}`)
     .join("\n");
 
   const prompt = `
-Dưới đây là toàn bộ nội dung cuộc họp được trích xuất từ Google Meet:
+Here is the full content of the meeting extracted from Google Meet:
 
 ${formattedTranscript}
 
-Người dùng có ghi chú: "${message}"
+User notes: "${message}"
 
-Hãy dựa trên nội dung cuộc họp để trả lời yêu cầu hoặc câu hỏi của người dùng. Nếu không đủ thông tin, hãy phản hồi rõ ràng rằng "chưa đủ thông tin".
+Please use the meeting content to respond to the user's request or question. If the information is insufficient, clearly respond with "not enough information."
 `;
   console.log("prompt ", prompt);
 
@@ -39,15 +36,15 @@ Hãy dựa trên nội dung cuộc họp để trả lời yêu cầu hoặc câ
     );
     const aiReply =
       geminiResponse.data.candidates?.[0]?.content?.parts?.[0]?.text;
-    console.log("✅ Phản hồi từ Gemini:");
+    console.log("Gemini response:");
 console.log(aiReply);
     res.status(200).json({
-      message: "✅ Đã gửi vào Gemini thành công",
-      aiReply: aiReply || "❌ Không có phản hồi từ AI",
+      message: "Successfully sent to Gemini.",
+      aiReply: aiReply || "No response from AI.",
     });
   } catch (error) {
-    console.error("❌ Lỗi gọi Gemini:", error.response?.data || error.message);
-    res.status(500).json({ error: "Lỗi khi gọi Gemini API" });
+    console.error("Error calling Gemini:", error.response?.data || error.message);
+    res.status(500).json({ error: "Error calling Gemini API" });
   }
 });
 

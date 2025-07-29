@@ -18,5 +18,5 @@ app.use("/api", agentRoute);
 
 
 app.listen(PORT, () => {
-  console.log(`✅ Server đang chạy tại http://localhost:${PORT}`);
+  console.log(` Server is running on http://localhost:${PORT}`);
 });
