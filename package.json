@@ -1,0 +1,14 @@
+{
+  "name": "meet-audio-agent-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^1.0.0",
+    "axios": "^1.5.0",
+    "dotenv": "^16.0.0",
+    "ws": "^8.0.0"
+  }
+}
