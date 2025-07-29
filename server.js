@@ -1,24 +1,22 @@
+// backend/server.js
 require('dotenv').config();
-const WebSocket = require('ws');
-const http = require('http');
-const { summarizeWithGemini } = require('./services/llm');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const agentRoute = require("./routes/agent");
 
-const server = http.createServer();
-const wss = new WebSocket.Server({ server });
+const app = express();
+const PORT= process.env.PORT;
+app.use(bodyParser.json());
 
-wss.on('connection', ws => {
-  console.log('Client connected');
+app.use(
+  cors()
+);
 
-  ws.on('message', async msg => {
-    try {
-      const transcript = msg.toString();
-      const summary = await summarizeWithGemini(transcript);
-      ws.send(summary);
-    } catch (err) {
-      console.error('Processing error:', err);
-      ws.send('Error processing');
-    }
-  });
+
+app.use("/api", agentRoute);
+
+
+app.listen(PORT, () => {
+  console.log(`✅ Server đang chạy tại http://localhost:${PORT}`);
 });
-
-server.listen(5001, () => console.log('WebSocket server on port 5001'));
